@@ -90,6 +90,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     handleTabChange(event)
     {
+        //this method for set tab values if user change tab then this method will call
         var values = event.target.label;
         this.objectType = values;
         if(values == 'More')
@@ -108,6 +109,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     getNewData(type)
     {
         //result=[];
+        //here we call apex controller to get data and columns of particular object
             getData({ objectType: type })
                 .then(result => {
                     if(result.length!=0)
@@ -132,6 +134,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
                       //console.log(Object.keys(result[0])[i]);
                       this.viewData.push(   { value: String(Object.keys(result[0])[i]), label: String(Object.keys(result[0])[i]) }  );
                     }
+                        //calculating paze size and record to display for pagination
                     this.newDisplay = this.defaultOptions;
                     this.results = result;
                     this.recordDisplay = this.results.slice(0,this.recordToDisplay);
@@ -147,6 +150,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
                         if(i==3)
                         break;
                     }
+                        //here we change button variant accoring to requriment
                     var button = this.template.querySelectorAll("lightning-button");
                     button.forEach(bun => {
                         console.log(bun.label);
@@ -177,6 +181,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
                 }
                 else
                 {
+                    //if any data not found then it will clear all screnn
                     this.columns=[];
                     this.totalSize = 0;
                     console.log('yess in else');
@@ -191,12 +196,14 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
 
     getSelectedName(event)
     {
+        //for getting selected rows form data tabel
         console.log(event.detail.selectedRows);
         this.selectedRows = event.detail.selectedRows;
         this.selectedRowsSize = this.selectedRows.length;
     }
     handleClose()
     {
+        //close modal where we can select comlimns to display
         this.modalOpen = false;
 
         if(this.tempColumns.length !=0)
@@ -239,6 +246,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
 
     navigateToNewRecord() {
+        //for display new record list
         this[NavigationMixin.Navigate]({
             type: 'standard__objectPage',
             attributes: {
@@ -250,12 +258,13 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
 
     handleRowAction( event ) {
-
+        //for 3 button in columns
         const actionName = event.detail.action.name;
         const row = event.detail.row;
         switch ( actionName ) {
             //in case of  view
             case 'View':
+                //view will display all records of perticular data
                 this[NavigationMixin.GenerateUrl]({
                     type: 'standard__recordPage',
                     attributes: {
@@ -269,6 +278,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
 
                 //in case of edit
             case 'Edit':
+                //to change in data 
                 // this[NavigationMixin.Navigate]({
                 //     type: 'standard__recordPage',
                 //     attributes: {
@@ -281,6 +291,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
                 // //this.results=[];
                 // this.getNewData(this.objectType);
                 getEditableFields({ objectType: this.typee })
+                //getting feidls whihc we can edit
                 .then(result => {
                     this.editableFields = result;
                     console.log(this.editableFields);
@@ -292,6 +303,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
                 break;
             case 'Delete':
                 var temp = [];
+                //for deleting any record
                 temp.push(row);
                 console.log(temp)
                 deleteObject({ objectList: temp , objectType : this.objectType})
@@ -311,6 +323,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     handleDelete()
     {
+        //for deleting multiple records at a time
         deleteObject({ objectList: this.selectedRows , objectType : this.objectType})
                 .then(result => {
                     this.results=[];
@@ -327,6 +340,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
 
     handleComboChange(event)
     {
+        //for changing display size of any record
         console.log(event.target.value);
         this.recordToDisplay=parseInt(event.target.value);
         this.recordDisplay = this.results.slice(0,this.recordToDisplay);
@@ -339,6 +353,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
             break;
         }
         console.log(this.recordDisplay);
+        //for changiing button variant acording to task
         var button = this.template.querySelectorAll("lightning-button");
                     button.forEach(bun => {
                         console.log(bun.label);
@@ -387,6 +402,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     handleSobjectSave()
     {
+        //after save on edit
         this.objectModal = false;
         var temp = [];
 
@@ -403,6 +419,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
 
     handleRight()
     {
+        //for right button to show buttons
         if(this.totalPages > 3 && this.pageNumber[this.pageNumber.length-1] != this.totalPages)
         {
             console.log(this.totalPages + 'total');
@@ -424,6 +441,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     handleLeft()
     {
+        //for left button to show buttons
         if(this.pageNumber[0]!=1)
         {
         this.pageNumber = [];
@@ -439,6 +457,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     setRecords(event)
     {
+        //after selecting page of change record to display this method will call and set data
         this.variant = 'Brand';
         console.log('In Set');
         var page = parseInt(event.target.label);
@@ -491,7 +510,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
     }
     handleEditSave(event)
     {
-
+        //after edit save records to server
        event.preventDefault();
 
        this.template.querySelector('lightning-record-edit-form').submit(event.detail.fields);
@@ -507,6 +526,7 @@ export default class DynamicComponent extends NavigationMixin(LightningElement)
 
     handleRefresh()
     {
+        //for refreshing data
         this.results=[];
         this.recordDisplay=[];
         this.getNewData(this.typee);
