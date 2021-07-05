@@ -1,5 +1,6 @@
 <template>
     <lightning-card>
+        <!--Tab set display-->
     <lightning-tabset variant="scoped">
         <template for:each={lstTabs} for:item="tab">
             <lightning-tab label={tab.Name} key={tab.Name} onactive={handleTabChange}>
@@ -8,6 +9,7 @@
                 <lightning-button variant="brand" label={button} onclick={navigateToNewRecord} class="slds-float_right slds-p-right_xx-small"></lightning-button>
                 <lightning-button-icon icon-name="utility:add" class="slds-float_right slds-p-right_xx-small" onclick={openModal} alternative-text="Settings" title="Settings"></lightning-button-icon>
             </br></br>
+                <!--Display data table-->
                 <lightning-datatable
                      data={recordDisplay}
                      columns={columns}
@@ -37,7 +39,7 @@
                 
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
                     
-
+                    <!--Options for selecting type of columns to diplay-->
                     <lightning-dual-listbox id="selectOptions"
                     name="Select Options"
                     label="Select Options"
@@ -61,6 +63,7 @@
     </template>
     
     {totalSize} Item .  page 1 of {totalPages}
+    <!--Displayibng buttons and page size and page nummber-->
     <div class="slds-align_absolute-center">
         <template if:true={pageNumber}>
             <lightning-button icon-name="utility:chevronleft" onclick={handleLeft}></lightning-button>
@@ -72,6 +75,7 @@
             </template>
             <lightning-button  icon-name="utility:chevronright" onclick={handleRight}></lightning-button>
     </div>
+    <!--Combo box for size of page-->
     <div style="background-color :white; height :50px;">
     <lightning-combobox
             class="slds-float_right"
@@ -142,7 +146,7 @@
                 <!-- Modal/Popup Box LWC body starts here -->
                 
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
-                    
+                    <!--Edit form to edit recxords-->
                     <lightning-record-edit-form object-api-name={typee} record-id={ids} onsubmit={handleEditSave} onsuccess={handleRefresh}>
                         <template for:each={editableFields} for:item="data">
                             <lightning-input-field key={data} field-name={data}
